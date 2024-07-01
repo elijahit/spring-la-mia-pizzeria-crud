@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import it.elijah.pizzeria.model.Pizza;
 import it.elijah.pizzeria.repository.PizzaRepository;
@@ -21,11 +22,15 @@ public class PizzaController {
 	private PizzaRepository repository;
 	
 	@GetMapping
-	public String index(Model model) {
+	public String index(Model model, @RequestParam(name = "search", required = false) String search) {
 		
 		List<Pizza> pizze = new ArrayList<>();
 		
-		pizze = repository.findAll();
+		if(search == null || search.isBlank()) {			
+			pizze = repository.findAll();
+		} else {
+			pizze = repository.findByNomeIgnoreCase(search);
+		}
 		
 		model.addAttribute("pizze", pizze);
 		

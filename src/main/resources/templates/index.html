@@ -17,17 +17,25 @@
 </head>
 
 <body>
-	<nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="/">Gestionale Pizzeria</a>
-		</div>
-	</nav>
+	<div th:replace="~{fragments/header :: header()}"></div>
 	<div class="container">
+		<div class="row">
+			<div class="col-lg-10 col-0"></div>
+			<div class="col-lg-2 col-12">
+				<form>
+					<div class="input-group mt-5 mb-3">
+						<span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+						<input type="text" name="search" class="form-control" placeholder="Margherita" aria-label="Pizza"
+							aria-describedby="basic-addon1">
+					</div>
+				</form>
+			</div>
+		</div>
 		<div th:if="${pizze.isEmpty()}">
 			<p class="text-center mt-5">Al momento non c'è nessuna pizza disponibile</p>
 		</div>
 		<div th:unless="${pizze.isEmpty()}">
-			<table class="table mt-5">
+			<table class="table">
 				<thead>
 					<tr>
 						<th scope="col">Nome</th>
@@ -41,7 +49,7 @@
 						<th scope="row" th:text="${pizza.nome}"></th>
 						<td th:text="${pizza.descrizione}"></td>
 						<td th:text="${'€' + #numbers.formatDecimal(pizza.prezzo, 1, 2, 'COMMA')}"></td>
-						<td><a class="btn btn-primary" target="_blank" th:href="@{|/pizza/${pizza.id}|}"}>Dettagli</a></td>
+						<td><a class="btn btn-primary" th:href="@{|/pizza/${pizza.id}|}" }>Dettagli</a></td>
 					</tr>
 				</tbody>
 			</table>
