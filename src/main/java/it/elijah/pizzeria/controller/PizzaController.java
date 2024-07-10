@@ -93,4 +93,14 @@ public class PizzaController {
 		
 		return "redirect:/";
 	}
+
+	@PostMapping("/delete/{id}")
+	public String delete(
+			@ModelAttribute("pizza") Pizza pizza,
+			Model model) {
+
+		repository.delete(pizza);
+		
+		return "redirect:/";
+	}
 }

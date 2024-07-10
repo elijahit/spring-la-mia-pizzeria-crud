@@ -49,7 +49,12 @@
 						<th scope="row" th:text="${pizza.nome}"></th>
 						<td th:text="${pizza.descrizione}"></td>
 						<td th:text="${'€' + #numbers.formatDecimal(pizza.prezzo, 1, 2, 'COMMA')}"></td>
-						<td><a class="btn btn-primary" th:href="@{|/pizza/${pizza.id}|}" }>Dettagli</a></td>
+						<td class="d-flex gap-2">
+							<a class="btn btn-primary" th:href="@{|/pizza/${pizza.id}|}"><i class="bi bi-eye-fill"></i></a>
+							<a class="btn btn-primary" th:href="@{|/edit/${pizza.id}|}"><i class="bi bi-pencil-fill"></i></a>
+							<form th:action="@{|/delete/${pizza.id}|}" method="post">
+								<button class="btn btn-danger"><i class="bi bi-trash"></i></button>
+							</form>
 					</tr>
 				</tbody>
 			</table>
