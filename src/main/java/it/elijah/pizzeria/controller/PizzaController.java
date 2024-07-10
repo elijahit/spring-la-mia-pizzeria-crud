@@ -21,53 +21,76 @@ import jakarta.validation.Valid;
 @Controller
 @RequestMapping("/")
 public class PizzaController {
-	
+
 	@Autowired
 	private PizzaRepository repository;
-	
+
 	@GetMapping
 	public String index(Model model, @RequestParam(name = "search", required = false) String search) {
-		
+
 		List<Pizza> pizze = new ArrayList<>();
-		
-		if(search == null || search.isBlank()) {			
+
+		if (search == null || search.isBlank()) {
 			pizze = repository.findAll();
 		} else {
 			pizze = repository.findByNomeIgnoreCase(search);
 		}
-		
+
 		model.addAttribute("pizze", pizze);
-		
+
 		return "index";
 	}
-	
+
 	@GetMapping("/pizza/{id}")
 	public String show(@PathVariable("id") Integer pizzaId, Model model) {
-		
+
 		model.addAttribute("pizza", repository.getReferenceById(pizzaId));
-		
+
 		return "/pizza/index";
 	}
-	
-	@GetMapping("/create") 
+
+	@GetMapping("/create")
 	public String createForm(Model model) {
 		model.addAttribute("pizza", new Pizza());
-		
+
 		return "/create/index";
-		
+
 	}
-	
+
 	@PostMapping("/create")
 	public String responseForm(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult,
 			Model model) {
-		
-		 if(bindingResult.hasErrors()) {
-		      return "/create/index";
-		   }
 
-		   repository.save(formPizza);
+		if (bindingResult.hasErrors()) {
+			return "/create/index";
+		}
+
+		repository.save(formPizza);
+
+		return "redirect:/";
+
+	}
+
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Integer pizzaId, Model model) {
+
+		model.addAttribute("pizza", repository.getReferenceById(pizzaId));
+
+		return "/edit/index";
+	}
+
+	@PostMapping("/edit/{id}")
+	public String update(
+			@Valid @ModelAttribute("pizza") Pizza pizza,
+			BindingResult bindingResult,
+			Model model) {
+		
+		if(bindingResult.hasErrors()) {
+			return "/edit/index";
+		}
+		
+		repository.save(pizza);
 		
 		return "redirect:/";
-		
 	}
 }
